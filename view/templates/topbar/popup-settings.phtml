@@ -1,0 +1,326 @@
+<?php
+/**
+ * @var VE_Editor $editor
+ * @var VE_View_Manager $this
+ */
+$post=$editor->getPost();
+$positionOptions=$editor->getVeManager()->getPopupManager()->positionOptions;
+$appearanceOptions=array(
+    ''=>'Default',
+    'center'=>'Center',
+);
+$placementOptions=array(
+    ''=>'None',
+    'all'=>'Whole site',
+    'post'=>'All posts',
+    'page'=>'All pages',
+    'category'=>'By Category',
+
+);    
+
+$openOptions=array(
+    ''=>'Not open automatically',
+    'open_on_mouse_out'=>'Open when mouse out of page',
+    'open_with_delay'=>'Open after page loaded',
+);
+function getBackgroundStyleOptions($current_value) {
+    $output = '<option value="">' . __( 'Theme defaults', 'visual_editor' ) . '</option>';
+    $styles = array(
+        __( "Cover", 'visual_editor' ) => 'cover',
+        __( 'Contain', 'visual_editor' ) => 'contain',
+        __( 'No Repeat', 'visual_editor' ) => 'no-repeat',
+        __( 'Repeat', 'visual_editor' ) => 'repeat'
+    );
+    foreach ( $styles as $name => $style ) {
+        $output .= '<option value="' . $style . '"'.selected($style,$current_value,false).'>' . $name . '</option>';
+    }
+    return $output;
+};
+$poptions = get_post_meta($post->ID,'_ve_poptions',true);
+        if(!is_array($poptions))
+        {
+            $poptions = array();
+        }
+?>
+<a href="#TB_inline?width=600&height=550&inlineId=ve-popup-settings" title="Popup Settings" class="thickbox">Popup Setting</a>
+<div id="ve-popup-settings" class="hidden">
+    <form class="ve-ajax-form ve-popup-settings" data-update-values="1">
+        <input type="hidden" name="action" value="ve_update_post_meta"/>
+        <div class="ve-ui-tabs">
+            <ul>
+                <li><a href="#popup-setting-tab1">Setting</a></li>
+                <li><a href="#popup-setting-tab2">Style</a></li>
+            </ul>
+
+            <div id="popup-setting-tab1" class="ui-tabs-panel">
+                <p>
+                    <label for="ve_post_title">Popup Title:</label>
+                    <input class="" id="ve_post_title" type="text" name="post_title" value="<?php echo esc_attr($editor->post->post_title);?>"/>
+                </p>
+                <p class="ve_row">
+                    <label for="position" class="ve_col-sm-3">Popup Options:</label>
+                </p>
+                <ul class="popup-options-list">
+                <?php foreach($poptions as $option){
+                    $str = $positionOptions[$option['position']] . "_";
+                    $str .= $placementOptions[$option['placement']] . "_";
+                    $str .= $openOptions[$option['open']] ;
+                    ?>
+
+                       <li><?php echo $str;?></li>
+
+                <?php } ?>
+                </ul>
+
+
+            </div>
+
+            <!-- BEGIN POPUP SETTINGS FORM -->
+            <div id="popup-setting-tab2" class="">
+                <?php $img_ids=$post->background_image;?>
+                <!-- amination -->
+                <div class="ve_row popup-settings-section">
+                    
+                    <div class="ve_col-sm-12">
+                        <h3>Animations:</h3>    
+                        
+                        <div class="ve_col-sm-3">
+                            Select popup animation:
+                        </div>
+                        <div class="ve_col-sm-3">
+
+                            <select name="animation" id="animation">
+                                <?php ve_animation_select($post->animation)?>
+                            </select>
+                        </div>
+                        <div class="ve_col-sm-3">
+                            <div id="popup-test-animation" style="text-align: center;"><i class="fa fa-windows fa-3x"></i></div>
+                        </div>
+                        <script type="text/javascript">
+                            (function($){
+                                var testAnimation=function(x){
+                                    x='veani-'+x;
+                                    $('#popup-test-animation').removeClass().addClass(x + ' veani-animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+                                        $(this).removeClass();
+                                    });
+                                };
+                                $('#animation').on('change',function(){
+                                    testAnimation($(this).val());
+                                })
+                            })(jQuery);
+                        </script>
+                    </div>
+                </div>
+                <!-- /amination -->
+
+                
+                <div class="ve_row  popup-settings-section">
+                    
+                    <div class="ve_col-sm-12">
+                        <h3>Background:</h3>
+
+                     <!-- select type of background -->
+                     <div class="ve_col-sm-3">
+                        <input type="radio" checked="checked" name="popup-bg-select" value="solid-bg" /> Solid <div style="height: 10px;"></div>
+                        <input type="radio" name="popup-bg-select" value="image-bg" /> Image
+                     </div>   
+
+                     <!-- details of types of background -->
+                     <div class="ve_col-sm-8">
+
+                        <!-- solid bg -->
+                        <div class="popup-solid-bg">
+                            <!-- color picker -->
+                            <div class="color-group">
+                                <input type="text" name="background_color" value="<?php echo $post->background_color;?>" class="ve_color-control">
+                            </div>
+
+                            <!-- opacity -->
+                            <label>Opacity</label>
+                            <div>
+                                <input type="number" step="0.01" name="background_opacity" value="<?php echo $post->background_opacity;?>">
+                            </div>
+
+                        </div>
+
+                        <!-- image bg -->
+                        <div class="popup-image-bg">
+                            <!-- image picker -->
+                            Select image:
+                            <div class="ve_input_block ve_col-sm-12">
+                                <input type="hidden" class="ve-media-selected-images-ids" name="background_image" value="<?php echo $img_ids;?>"/>
+
+                                <div class="ve-media-selected-images" style="float:left">
+                                    <ul class="ve-media-selected-images-list">
+                                        <?php echo ve_field_list_images(explode(',',$img_ids));?>
+                                    </ul>
+                                </div>
+                                <a class="ve-media-add-images-btn" style="" href="#" title="Add image">Add image</a>
+                            </div>
+                        
+                            <br />
+                            <!-- image bg stle -->
+                            Style: 
+                            <div class="ve_background-style ve_col-sm-12">
+                                <select name="background_style" class="ve_background-style">
+                                    <?php
+                                    echo getBackgroundStyleOptions($post->background_style);
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                     </div>
+
+                    </div>
+                </div>
+                    <!-- close button -->
+                <?php
+                    $close_btn_styles=array(
+                        'no-button' => 'no button',
+                        'fa-times'=>'times',
+                        'fa-times-circle '=>'times circle',
+                        'fa-times-circle-o'=>'times circle o',
+
+                    );
+                    for($i=3;$i<=17;$i++){
+                        if($i==9){
+                            continue;
+                        }
+                        if($i<10){
+                            $i='0'.$i;
+                        }
+                        $close_btn_styles['close-btn-icon-'.$i]='btn '.$i;
+                    }
+                    $close_btn_positions=array(
+                        'right'=>'Right',
+                        'left'=>'Left',
+                    );
+                ?>
+                
+                <div class="ve_row  popup-settings-section">
+
+                    <div class="ve_col-sm-12">
+                        <h3>Close button:</h3>
+                        
+                        <!-- button style lable -->
+                        <div class="ve_col-sm-3">
+                            <label for="popup-close-btn-style">Select Button Style:</label>
+                        </div>    
+
+                        <!-- Drop down button style -->
+                        <div class="ve_col-sm-8">
+                            <select id="popup-close-btn-style" name="close_btn_style">
+                                <?php
+                                $close_btn_style=$post->close_btn_style;
+                                foreach($close_btn_styles as $o_value=>$o_title){
+                                    printf('<option value="%s"%s>%s</option>',$o_value,selected($close_btn_style,$o_value,false),$o_title);
+                                }?>
+                            </select>
+                            <div style="height: 10px;"></div>
+                        </div>
+
+                        <script type="application/javascript">
+                            (function($) {
+                                var formatState=function (state) {
+                                    if (!state.id) {
+                                        return state.text;
+                                    }
+                                    var $state = $(
+                                        '<span><i class="fa ' + state.element.value.toLowerCase() + '"></i> ' + state.text + '</span>'
+                                    );
+                                    return $state;
+                                };
+                                $("#popup-close-btn-style").select2({
+//                                    width:300,
+                                    templateResult: formatState,
+                                    templateSelection: formatState
+                                });
+                            })(jQuery);
+                        </script>
+
+
+                        <!-- Position -->
+                        <div class="ve_col-sm-3">
+                            <label>Position:</label>
+                        </div>
+
+                        <!-- position select -->
+                        <div class="ve_col-sm-8">
+                            <select name="close_btn_position">
+                                <?php
+                                    $close_btn_position=$post->close_btn_position;
+                                    if(!$close_btn_position){
+                                        $close_btn_position='right';
+                                    }
+                                    foreach($close_btn_positions as $o_value=>$o_title){
+                                        printf('<option value="%s"%s>%s</option>',$o_value,selected($o_value,$close_btn_position,false),$o_title);
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offset -->
+                <div class="ve_row  popup-settings-section">
+                    <div class="ve_col-sm-12">
+                        <h3>Offsets</h3>
+                        <div class="ve_col-sm-12">
+                            <p class="small-input">
+
+                                <label for="top">Top:</label>
+                                <input class="" type="text" name="close_btn_top" value="<?php echo esc_attr($post->close_btn_top);?>">
+
+                                <label for="left">Left:</label>
+                                <input type="text" name="close_btn_left" value="<?php echo esc_attr($post->close_btn_left);?>">
+
+                                <label for="bottom">Bottom:</label>
+                                <input type="text" name="close_btn_bottom" value="<?php echo esc_attr($post->close_btn_bottom);?>">
+
+                                <label for="right">Right:</label>
+                                <input type="text" name="close_btn_right" value="<?php echo esc_attr($post->close_btn_right);?>">
+                                <span class="clearfix"></span>
+                            </p> 
+
+                        </div>
+                        
+                    </div>
+                       
+                    
+                </div>
+                
+
+                <div class="ve_row  popup-settings-section">
+                    
+                    <div class="ve_col-sm-12">
+                        <h3>Full width:</h3>
+                        <div class="ve_col-sm-12">
+                            <input type="hidden" name="fullwidth" id="popup-fullwith-input" value="">
+                            <input id="set-popup-fullwidth" type="checkbox" name="fullwidth" value="1"<?php checked($post->fullwidth);?>/> Yes!
+
+                        </div>
+
+
+                        <script type="text/javascript">
+                            jQuery('#set-popup-fullwidth').on('click',function(e){
+
+                            })
+                        </script>
+                    </div>
+                    
+                    
+                </div>
+
+            </div>
+
+            <!-- END POPUP SETTINGS FORM -->
+        </div>
+
+        <p class="form-control submit">
+            <input type="submit" value="Update" class="save"/>
+        </p>
+
+
+    </form>
+</div>

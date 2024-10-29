@@ -1,0 +1,141 @@
+<?php
+/**
+ * @var $popup WP_Post
+ * @var array $args
+ */
+$title=$popup->post_title;
+$id=$popup->ID;
+$title=apply_filters( 'the_title', $title, $id );
+$content=$popup->post_content;
+
+remove_filter('the_content',array($editor,'addContentAnchor'));
+$content = apply_filters( 'the_content', $content );
+$content = str_replace( ']]>', ']]&gt;', $content );
+$option=wp_parse_args($option,array(
+    'width'=>'',
+    'height'=>'',
+));
+if(!is_array($option))
+{
+    $option = array();
+}
+$popupData = array(
+    'position' => $option['position'],
+    'placement' => $option['placement'],
+    'cover_site_background' => $option['background_cover_site'],
+    'offset' => array(
+        'top' => $option['top'],
+        'left' => $option['left'],
+        'right' => $option['right'],
+        'bottom' => $option['bottom'],
+    ),
+    'size' => array(
+        'width' => intval($option['width']),
+        'height' => intval($option['height']),
+    ),
+    'open' => $option['open'],
+    'delay' => $option['delay'],
+    'inactive' => absint($option['inactive']),
+    'animation'=>$popup->animation,
+
+);
+
+$screen_width=ve_get_post_setting('screen_size',$popup->ID);
+$screen_width=absint($screen_width);
+if($screen_width<100){
+    $screen_width='1170';
+}
+if($screen_width) {
+    $screen_width = intval($screen_width) - 82;
+    if($popup->fullwidth){
+        $screen_width='100%';
+    }
+    $popupData['size']['width'] = $screen_width;
+}
+
+$background_color=$popup->background_color;
+$background_image=$popup->background_image;
+$background_style=$popup->background_style;
+$background_opacity=$popup->background_opacity;
+$close_btn_style=$popup->close_btn_style;
+if(!$close_btn_style){
+    $close_btn_style='fa-times-circle';
+}
+$close_btn_style='close-icon fa '.$close_btn_style;
+$close_btn_position=$popup->close_btn_position;
+if(!$close_btn_position){
+    $close_btn_position='right';
+}
+$close_btn_position='close-'.$close_btn_position;
+$close_btn_offsets=array(
+    'top'=>$popup->close_btn_top,
+    'left'=>$popup->close_btn_left,
+    'right'=>$popup->close_btn_right,
+    'bottom'=>$popup->close_btn_bottom,
+);
+$close_btn_offset='';
+foreach($close_btn_offsets as $_offset=>$_value){
+    if($_value!==''){
+        $close_btn_offset.=$_offset.':'.$_value.';';
+    }
+}
+?>
+<style type="text/css">
+    #ve-popup-<?php echo $id;?> .ve-popup-overlay{
+        <?php if($background_color){
+            if($background_opacity){
+                list($r,$g,$b)=ve_hex2rgb($background_color);
+                printf('background-color:rgba(%s,%s,%s,%s);',$r,$g,$b,$background_opacity);
+            }else{
+                echo 'background-color:'.$background_color.';';
+            }
+        }?>
+        <?php if($background_image){
+            list($background_image_src,$width,$height)=wp_get_attachment_image_src($background_image,"full");
+            printf('background-image:url(%s);',$background_image_src);
+        }?>
+        <?php if($background_style){
+            $style_name='';
+            switch($background_style) {
+                case 'cover':
+                $style_name = 'background-size';
+                //$val = 'coverage';
+                break;
+                case 'contain':
+                    $style_name = 'background-size';
+                    break;
+                case 'no-repeat':
+                    $style_name='background-repeat';
+
+                    break;
+                case 'repeat':
+                    $style_name='background-repeat';
+                    break;
+            }
+            if($style_name){
+                printf('%s:%s;',$style_name,$background_style);
+            }
+        }?>
+    }
+    <?php if($close_btn_offset){?>
+    #ve-popup-<?php echo $id;?> .close-popup-offset{
+        <?php echo $close_btn_offset;?>
+    }
+    <?php }?>
+</style>
+<?php if(!empty($background_image_src)){?>
+<script type="text/javascript">
+    (function(){
+        var image=new Image();
+        image.src="<?php echo $background_image_src;?>";
+    })();
+</script>
+<?php };?>
+<div class="ve-popup ve-hide" style="display: none;" id="ve-popup-<?php echo $id;?>" data-popup-id="<?php echo $id;?>" data-popup='<?php echo json_encode($popupData);?>'>
+
+    <div class="<?php echo $popupData['cover_site_background'] == 'not_cover'? 've-popup-overlay-no-cover' : 've-popup-overlay'; ?>"></div>
+    <div class="ve-popup-wrapper">
+        <div class="popup-content"><?php echo $content;?></div>
+        <a title="Close this" href="#" data-ve-prevent="1" class="close-popup <?php echo $close_btn_position;?> close-popup-offset"><i class="<?php echo $close_btn_style;?>"></i></a>
+    </div>
+</div>

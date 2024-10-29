@@ -1,0 +1,142 @@
+<?php
+/**
+ * @var VE_Editor $editor
+ * @var VE_View_Manager $this
+ */
+if (empty($editor->post->metas['post_noindex']))
+{
+    $editor->post->metas['post_noindex'] = "";
+}
+$post=$editor->getPost();
+function getBackgroundStyleOptions($current_value) {
+    $output = '<option value="">' . __( 'Theme defaults', 'visual_editor' ) . '</option>';
+    $styles = array(
+        __( "Cover", 'visual_editor' ) => 'cover',
+        __( 'Contain', 'visual_editor' ) => 'contain',
+        __( 'No Repeat', 'visual_editor' ) => 'no-repeat',
+        __( 'Repeat', 'visual_editor' ) => 'repeat'
+    );
+    foreach ( $styles as $name => $style ) {
+        $output .= '<option value="' . $style . '"'.selected($style,$current_value,false).'>' . $name . '</option>';
+    }
+    return $output;
+};
+?>
+<a href="#TB_inline?width=600&height=550&inlineId=ve-page-settings" title="Page Settings" class="thickbox">Page Setting</a>
+<div id="ve-page-settings" class="hidden">
+    <form class="ve-ajax-form ui-tabs" data-update-values="1" action="">
+        <div class="ve-ui-tabs">
+            <ul>
+                <li><a href="#page-setting-tab1">Setting</a></li>
+                <li><a href="#page-setting-tab2">Style</a></li>
+            </ul>
+            <div class="ui-tabs-panel" id="page-setting-tab1">
+                <p>
+                    <label for="ve_post_title">Title:</label>
+                    <input class="" id="ve_post_title" type="text" name="post_title" value="<?php echo esc_attr($editor->post->post_title);?>"/>
+                </p>
+                <div>
+                    <label for="ve_post_slug">Slug:</label>
+                    <input class="" id="ve_post_slug" type="text" name="post_name" value="<?php echo esc_attr($editor->post->post_name);?>"/>
+                </div>
+                <p>
+                    <label class="ve_inline" for="ve_post_nofollow">No follow:</label>
+                    <input style="width: auto" class="" id="ve_post_nofollow" type="checkbox" name="metas[post_nofollow]" value="1" <?php @checked('1',$editor->post->metas['post_nofollow'])?>/>
+                    &nbsp;&nbsp;&nbsp;
+                    <label class="ve_inline" for="ve_post_noindex">No Index:</label>
+                    <input style="width: auto" class="" id="ve_post_noindex" type="checkbox" name="metas[post_noindex]" value="1" <?php @checked('1',$editor->post->metas['post_noindex'])?>/>
+                </p>
+                <p>
+                    <label for="ve_post_slug">Meta Description:</label>
+                    <br />
+                    <textarea class="" name="metas[post_description]"><?php echo @esc_attr($editor->post->metas['post_description']);?></textarea>
+                </p>
+                <p>
+                    <label for="ve_post_slug">Meta tags:</label>
+                    <br />
+                    <textarea class="" name="metas[post_tags]"><?php echo @esc_attr($editor->post->metas['post_tags']);?></textarea>
+                </p>
+                <p>
+                    <label for="ve_post_slug">Tracking code (Google Analytics/Statcounter...):</label>
+                    <br />
+                    <textarea class="" name="metas[tracking_code]"><?php echo @esc_attr($editor->post->metas['tracking_code']);?></textarea>
+                </p>
+                <p>
+                    <label for="ve_post_slug">Facebook Pixel:</label>
+                    <br />
+                    <textarea class="" name="metas[facebook_pixel]"><?php echo @esc_attr($editor->post->metas['facebook_pixel']);?></textarea>
+                </p>
+            </div>
+            <div id="page-setting-tab2">
+                <div class="ve_row  popup-settings-section">
+
+                    <div class="ve_col-sm-12">
+                        <h3>Background:</h3>
+                        <?php $img_ids=$post->background_image;?>
+                        <!-- select type of background -->
+                        <div class="ve_col-sm-5 ve_bg_type">
+                            <span><input type="radio" checked="checked" name="popup-bg-select" value="solid-bg" /> Solid</span>
+                            <span><input type="radio" name="popup-bg-select" value="image-bg" /> Image</span>
+                        </div>
+
+                        <!-- details of types of background -->
+                        <div class="ve_col-sm-7">
+
+                            <!-- solid bg -->
+                            <div class="ve_col-sm-12 popup-solid-bg">
+                                <!-- color picker -->
+                                <div class="color-group">
+                                    <input type="text" name="background_color" value="<?php echo $post->background_color;?>" class="ve_color-control">
+                                </div>
+
+                                <!-- opacity -->
+                                <label>Opacity</label>
+                                <div>
+                                    <input type="number" step="0.01" name="background_opacity" value="<?php echo $post->background_opacity;?>">
+                                </div>
+
+                            </div>
+
+                            <!-- image bg -->
+                            <div class="ve_col-sm-12 popup-image-bg">
+                                <!-- image picker -->
+                                Select image:
+                                <div class="ve_input_block ve_col-sm-12">
+                                    <input type="hidden" class="ve-media-selected-images-ids" name="background_image" value="<?php echo $img_ids;?>"/>
+
+                                    <div class="ve-media-selected-images" style="float:left">
+                                        <ul class="ve-media-selected-images-list">
+                                            <?php echo ve_field_list_images(explode(',',$img_ids));?>
+                                        </ul>
+                                    </div>
+                                    <a class="ve-media-add-images-btn" style="" href="#" title="Add image">Add image</a>
+                                </div>
+
+                                <br />
+                                <!-- image bg stle -->
+                                Style:
+                                <div class="ve_background-style ve_col-sm-12">
+                                    <select name="background_style" class="ve_background-style">
+                                        <?php
+                                        echo getBackgroundStyleOptions($post->background_style);
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="action" value="ve_update_post"/>
+
+        <p class="form-control submit">
+            <input type="submit" value="Update" class="save"/>
+        </p>
+
+    </form>
+    <div class="ve_clearfix"></div>
+</div>

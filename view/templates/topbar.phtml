@@ -1,0 +1,116 @@
+<?php
+/**
+ * @var VE_Editor $editor
+ */
+?>
+<div id="ve-topbar">
+    <div class="ve-center">
+        <?php echo $editor->getPostType(); $license=$this->getVeManager()->getLicenseManager();?>
+    </div>
+    <div class="ve-logo">
+        <img src="<?php echo VE_URL.'/view/images/logo.png'?>" />
+    </div>
+    <ul class="panel-items-control">
+        <li>
+            <a href="#" data-show-item><?php echo $editor->getPostType();?> Setting <i class="fa fa-angle-down"></i></a>
+            <ul class="submenu">
+                <?php if($editor->isPopup()){
+                    echo '<li>';
+                    $this->render('topbar/popup-settings');
+                    echo '</li>';
+                    echo '<li>';
+                    $this->render('topbar/popup-options');
+                    echo '</li>';
+                }
+                else if($editor->isWidget()){
+                    echo '<li>';
+                    $this->render('topbar/widget-settings');
+                    echo '</li>';
+                }
+                else {
+                    echo '<li>';
+                    $this->render('topbar/page-settings');
+                    echo '</li>';
+                }
+                if($editor->isTemplate()){
+                    ?>
+                    <?php $this->render('topbar/export-import');?>
+                    <?php
+                }
+                ?>
+            </ul>
+
+        </li>
+    </ul>
+    <div class="ve-screensize">
+        <label><input type="text" name="screensize" id="screensize" value=""/>px</label>
+    </div>
+
+    <div class="ve-right ve-buttons">
+        <ul class="panel-items-control">
+            <li>
+                <a id="toggle-mode" class="vebtn">Grid Off</a>
+            </li>
+
+
+            <?php if ($license->getType() == "ultimate") { ?>
+                <li>
+                    <a href="#" data-show-item>Save As <i class="fa fa-angle-down"></i></a>
+                    <ul class="submenu">
+                        <?php if(!$editor->isTemplate()){?>
+                            <li><?php $this->render('topbar/save-template');?></li>
+                        <?php }?>
+                        <?php if(!$editor->isElement()){?>
+                                <li><?php $this->render('topbar/custom-element');?></li>
+                            <?php }?>
+
+                        
+                    </ul>
+
+                </li>            
+            <?php }?>
+            
+
+            <li>
+                <a href="#" data-show-item>Save <i class="fa fa-angle-down"></i></a>
+                <ul class="submenu">
+                    <li><a id="update-post">Draft</a></li>
+                    <li><a id="publish-post">Publish</a></li>
+                    <?php if(!$editor->isWidget() && !$editor->isPopup()) {?>
+                    <li><a id="view_post_link" target="_blank" href="<?php echo get_permalink($editor->post_id);?>">View</a></li>
+                    <?php }?>
+                </ul>
+
+            </li>
+            <li>
+                <a href="#" data-show-item>New <i class="fa fa-angle-down"></i></a>
+                <ul class="submenu">
+                    <li><a  href="<?php echo admin_url("edit.php?ve_action=ve_inline&post_id=new&post_type=page");?>">Page</a></li>
+                    <?php if ($license->getType() == "ultimate") { ?>
+                        <li><a href="<?php echo admin_url("post-new.php?post_type=ve-popup");?>">Popup</a></li>
+                        <li><a href="<?php echo admin_url("post-new.php?post_type=ve-template");?>">Template</a></li>
+                    <?php } ?>
+                    
+                    
+                    
+                </ul>
+
+            </li>
+            <li>
+                <a href="#" data-show-item>Edit <i class="fa fa-angle-down"></i></a>
+                <ul class="submenu">
+                    <li><?php $this->render('topbar/page-listing');?></li>
+                    <?php if ($license->getType() == "ultimate") { ?>
+                        <li><?php $this->render('topbar/popup-listing');?></li>
+                        <li><?php $this->render('topbar/template-listing');?></li>
+                        <li><?php $this->render('topbar/custom-element-listing');?></li>
+                    <?php } ?>
+                </ul>
+
+            </li>
+            <li><a href="<?php echo admin_url();?>" class="vebtn">Exit</a></li>
+        </ul>
+
+
+    </div>
+</div>

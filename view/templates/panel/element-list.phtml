@@ -1,0 +1,28 @@
+<?php
+/**
+ * @var VE_Editor $editor
+ * @var VE_View_Manager $this
+ */
+
+?>
+<ul>
+    <?php
+    $elements=$editor->getAllElements();
+    foreach($elements as $e){
+	    if (trim($e['name']) == 'Column' || stripos(trim($e['id_base']), 've_form') !== FALSE)
+		    continue;
+//        if (trim($e['name']) != 'Column')
+
+	    ?>
+        <li class="element-list-item" data-id-base="<?php echo $e['id_base'];?>" data-group="<?=isset($e['group'])?$e['group']:'default';?>" data-params='<?=isset($e['params'])?$e['params']:''?>'>
+
+	        <div class="ve-element ve_element-<?php echo $e['id_base'];?><?=isset($e['group'])?' element-group-'.$e['group']:'';?>" title="<?php echo $e['name'];?>">
+	            <span class="icon"><i class="<?php echo $e['icon_class'];?>"></i> &nbsp;<?php echo $e['name']; ?></span>
+                <!--     <span class="name"><?php echo $e['name'];?></span> -->
+            </div>
+        </li>
+    <?php
+    }
+
+    ?>
+</ul>

@@ -1,0 +1,38 @@
+<?php
+/**
+ * @var VE_Editor $editor
+ * @var VE_View_Manager $this
+ */
+$admin_ajax_url=admin_url('admin-ajax.php');
+$export_url=add_query_arg(array('action'=>'ve_export','post_id'=>$editor->getPost()->ID),$admin_ajax_url);
+?>
+<li><a data-postid="<?php echo $editor->getPost()->ID;?>" href="<?php echo $export_url;?>">Export</a></li>
+<li><a class="thickbox" href="#TB_inline?width=300&height=200&inlineId=ve-import-popup" title="Import">Import</a>
+    <div id="ve-import-popup" class="hidden">
+        <form id="ve-import-form" class="ve-dialog" method="post" action="<?php echo admin_url('admin-ajax.php');?>" data-message="Template saved!" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="ve_import"/>
+            <input type="hidden" name="post_id" value="<?php echo $editor->getPost()->ID;?>"/>
+            <div style="padding:10px">
+                <label for="ve-import-file">Select file to import:</label>
+                <input id="ve-import-file" class="" name="ve_import_file" type="file" accept=".ve"/>
+                <label for="import-as-new-post">Import as new post:</label>
+                <input id="import-as-new-post" class="" name="ve_import_new" type="checkbox"/>
+                <p class="form-control submit">
+                    <input type="submit" value="Import" class="save"/>
+                </p>
+            </div>
+        </form>
+        <script type="text/javascript">
+            (function($){
+                var form=$('#ve-import-form');
+                form.on('submit',function(){
+                    if(!form.find('#ve-import-file').val()){
+                        alert('Please select a file!');
+                        return false;
+                    }
+                });
+            })(jQuery);
+        </script>
+        <div class="ve_clearfix"></div>
+    </div>
+</li>

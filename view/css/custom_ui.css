@@ -1,0 +1,73 @@
+.ve_explain {
+    font-size: .9em;
+    font-style: italic;
+    color: #888;
+    padding: 0 20px;
+    margin: 0;
+}
+
+.pure-form h3 {
+    color: #333;
+    padding: 15px 0 5px;
+}
+.ve_ui_section {
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+.pure-form h4 {
+    color: #555;
+    padding: 10px 0 10px;
+}
+
+.image-bg {
+    display: none;
+}
+
+.adv-solid-bg {
+    display: none;
+}
+
+.promo-area {
+    position: fixed;
+    /*left: 160px;*/
+    right: 0;
+    bottom: 10px;
+    width: 600px;
+    text-align: left;
+    z-index: 10000;
+}
+
+.promo-area > div {
+    display: block;
+    width: 100%;
+    padding: 15px 20px 10px;
+    border-bottom: 1px solid #eed;
+    font-size: 20px;
+}
+
+.promo-area > div:hover {
+    background-color: #ADEBFF;
+}
+
+
+
+
+.promo-area a {
+    display: block;
+}
+.promo-area a:hover, .promo-area a:visited, .promo-area a:active, .promo-area a:link {
+    text-decoration: none;
+}
+.promo-link {
+    width: 100%;
+    margin: auto;
+    padding: 20px 30px;
+    font-size: 2em;
+    color: #fff;
+    background-color: #0b4c6a;
+}
+
+.promo-link a {
+    color: #fff;
+}
+

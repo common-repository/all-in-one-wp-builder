@@ -1,0 +1,141 @@
+.ve_form {
+  /* checkbox and radio */
+  /*Radio Specific styles*/
+  /*Checkbox Specific styles*/
+}
+.ve_form form {
+  width: 100%;
+  font-size: 1em;
+}
+.ve_form form * {
+  max-width: 100%;
+}
+.ve_form input[type=text],
+.ve_form input[type=email],
+.ve_form input[type=password],
+.ve_form button,
+.ve_form textarea {
+  cursor: pointer;
+  display: block;
+  margin: auto;
+}
+.ve_form input:focus {
+  outline: none;
+}
+.ve_form input[type=text],
+.ve_form input[type=email],
+.ve_form input[type=password],
+.ve_form textarea,
+.ve_form select {
+  margin: 10px auto;
+  font-size: 1em;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 8px 10px;
+  background: none;
+  max-width: 100%;
+  border: 1px solid #a0b3b0;
+  color: #333;
+  border-radius: 0;
+  -webkit-transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.ve_form input:focus,
+.ve_form textarea:focus {
+  outline: 0;
+  border-color: #1ab188;
+}
+.ve_form textarea {
+  resize: vertical;
+}
+.ve_form input[type='radio'],
+.ve_form input[type='checkbox'] {
+  display: none;
+  cursor: pointer;
+}
+.ve_form input[type='radio']:focus,
+.ve_form input[type='radio']:active,
+.ve_form input[type='checkbox']:focus,
+.ve_form input[type='checkbox']:active {
+  outline: none;
+}
+.ve_form input[type='radio'] + label,
+.ve_form input[type='checkbox'] + label {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  margin-right: 10px;
+  color: #0b4c6a;
+}
+.ve_form input[type='radio'] + label:before,
+.ve_form input[type='radio'] + label:after,
+.ve_form input[type='checkbox'] + label:before,
+.ve_form input[type='checkbox'] + label:after {
+  content: '';
+  font-family: helvetica;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+  position: absolute;
+}
+.ve_form input[type='radio'] + label:before,
+.ve_form input[type='checkbox'] + label:before {
+  background-color: #efefef;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.ve_form input[type='radio'] + label:after,
+.ve_form input[type='checkbox'] + label:after {
+  color: #fff;
+}
+.ve_form input[type='radio']:checked + label:before,
+.ve_form input[type='checkbox']:checked + label:before {
+  -moz-box-shadow: inset 0 0 0 10px #1ab188;
+  -webkit-box-shadow: inset 0 0 0 10px #1ab188;
+  box-shadow: inset 0 0 0 10px #1ab188;
+}
+.ve_form input[type='radio'] + label:before {
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+}
+.ve_form input[type='radio'] + label:hover:after,
+.ve_form input[type='radio']:checked + label:after {
+  content: '\2022';
+  position: absolute;
+  top: 0px;
+  font-size: 19px;
+  line-height: 15px;
+}
+.ve_form input[type='radio'] + label:hover:after {
+  color: #c7c7c7;
+}
+.ve_form input[type='radio']:checked + label:after,
+.ve_form input[type='radio']:checked + label:hover:after {
+  color: #fff;
+}
+.ve_form input[type='checkbox'] + label:before {
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.ve_form input[type='checkbox'] + label:hover:after,
+.ve_form input[type='checkbox']:checked + label:after {
+  content: "\2713";
+  line-height: 18px;
+  font-size: 14px;
+}
+.ve_form input[type='checkbox'] + label:hover:after {
+  color: #c7c7c7;
+}
+.ve_form input[type='checkbox']:checked + label:after,
+.ve_form input[type='checkbox']:checked + label:hover:after {
+  color: #fff;
+}

@@ -1,0 +1,26 @@
+<?php
+/**
+ * WP_Widget_Archives
+ */
+
+class VeCore_VeWpArchives extends Ve_Element implements VE_Element_Interface{
+    function __construct(){
+        $id_base='ve_wp_archives';
+        $name='Archives';
+        $options=array(
+            'title'=>'Archives',
+            'description'=>'Archives description',
+            'icon'=>'ve-row.png',
+            'icon_class'=>'fa fa-archive',
+            'container'=>false,
+            'has_content'=>false,
+            'group'=>'wp',
+            'defaults'=>array(),
+
+        );
+        parent::__construct($id_base,$name,$options);
+        $this->setWpWidget('WP_Widget_Archives');
+
+    }
+
+}
